@@ -11,19 +11,19 @@ import core.jdbc.ConnectionManager;
 import next.model.User;
 
 public class UserDao {
-    public void insert(User user) throws SQLException {
+    public void insert(User user) throws SQLException { //insert 메소드
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
             con = ConnectionManager.getConnection();
-            String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, user.getUserId());
-            pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getName());
-            pstmt.setString(4, user.getEmail());
+            String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)"; //sql문
+            pstmt = con.prepareStatement(sql); //연결에 sql문 준비시킴
+            pstmt.setString(1, user.getUserId()); //첫번째 물음표 값
+            pstmt.setString(2, user.getPassword()); //두번째 물음표 값
+            pstmt.setString(3, user.getName()); //세번째 물음표 값
+            pstmt.setString(4, user.getEmail()); //네번째 물음표 값
 
-            pstmt.executeUpdate();
+            pstmt.executeUpdate(); //값을 모두 대입한 결과 실행
         } finally {
             if (pstmt != null) {
                 pstmt.close();
@@ -35,29 +35,30 @@ public class UserDao {
         }
     }
 
-    public void update(User user) throws SQLException {
+    public void update(User user) throws SQLException { //update 메소드
         // TODO 구현 필요함.
     }
 
-    public List<User> findAll() throws SQLException {
+    public List<User> findAll() throws SQLException { //모든 user 반환 메소드
         // TODO 구현 필요함.
         return new ArrayList<User>();
     }
 
-    public User findByUserId(String userId) throws SQLException {
+    public User findByUserId(String userId) throws SQLException { //userId로 검색
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
+            String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?"; //sql문
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, userId);
 
-            rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery(); //결과 집합 저장
 
             User user = null;
-            if (rs.next()) {
+            if (rs.next()) { //결과 집합을 하나씩 검사(다음 값이 있으면 true, 없으면 false 반환)
+                //해당 user 저장
                 user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
                         rs.getString("email"));
             }
