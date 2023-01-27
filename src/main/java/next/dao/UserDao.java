@@ -41,7 +41,34 @@ public class UserDao {
 
     public List<User> findAll() throws SQLException { //모든 user 반환 메소드
         // TODO 구현 필요함.
-        return new ArrayList<User>();
+        List<User> users = new ArrayList<>();
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            String sql = "SELECT * FROM USERS";
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                User user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+                        rs.getString("email"));
+                users.add(user);
+            }
+        }finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return users;
     }
 
     public User findByUserId(String userId) throws SQLException { //userId로 검색
